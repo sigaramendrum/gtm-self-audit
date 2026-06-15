@@ -56,17 +56,6 @@ a{color:var(--gold)}
 .privacy{margin-top:12px;font-size:12.5px;color:var(--muted)}
 .privacy::before{content:"🔒 ";}
 
-/* archetype selector */
-.arche{padding:30px 0 6px}
-.section-label{color:var(--gold);text-transform:uppercase;letter-spacing:.12em;font-size:12px;font-weight:600;margin:0 0 12px}
-.chips{display:flex;flex-wrap:wrap;gap:10px}
-.chip{cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--text);
-  border-radius:999px;padding:9px 16px;font-size:14px;font-weight:500;transition:.15s}
-.chip:hover{border-color:var(--gold)}
-.chip[aria-pressed="true"]{background:var(--gold);color:#0E1116;border-color:var(--gold)}
-.arche-note{margin-top:12px;color:var(--muted);font-size:14px;min-height:20px}
-.arche-note b{color:var(--gold)}
-
 /* sections */
 .section{padding:34px 0 8px}
 .section > h2{font-size:26px;margin:0 0 4px}
@@ -121,6 +110,8 @@ a{color:var(--gold)}
 .monday .ignore{color:var(--muted)}
 
 footer{border-top:1px solid var(--line);padding:26px 0 50px;color:var(--muted);font-size:13px;text-align:center}
+footer a{color:var(--gold)}
+footer #footerContact{margin-top:8px}
 
 @media print{
   .topbar,.actions{display:none}
@@ -150,7 +141,7 @@ footer{border-top:1px solid var(--line);padding:26px 0 50px;color:var(--muted);f
       <ul>
         <li>For each question, choose <b>Crisp</b> (you can answer it now, with data), <b>Partly</b> (a directional view, no evidence), or <b>No</b> (can't answer crisply today).</li>
         <li>Scoring: Crisp = 2, Partly = 1, No = 0. You get a read per section, not a grade.</li>
-        <li>The rule from the talk holds: <b>three or more "No"s in a section means that lens is unowned</b> — fix ownership and evidence before you add spend.</li>
+        <li><b>If you have three or more "No"s in a section, that lens is not fully owned</b> — fix ownership and verify evidence before you invest.</li>
       </ul>
       <p class="privacy">Everything is computed in your browser. No answers are stored on a server or sent anywhere.</p>
     </div>
@@ -158,12 +149,6 @@ footer{border-top:1px solid var(--line);padding:26px 0 50px;color:var(--muted);f
 </header>
 
 <main class="wrap">
-  <section class="arche">
-    <p class="section-label">First — where are you today?</p>
-    <div class="chips" id="archeChips"></div>
-    <p class="arche-note" id="archeNote">Pick your archetype to tailor the read.</p>
-  </section>
-
   <div id="sections"></div>
 </main>
 
@@ -179,6 +164,7 @@ footer{border-top:1px solid var(--line);padding:26px 0 50px;color:var(--muted);f
 <footer>
   <div class="wrap">
     <p id="footerLine"></p>
+    <p id="footerContact"></p>
   </div>
 </footer>
 
@@ -195,7 +181,7 @@ footer{border-top:1px solid var(--line);padding:26px 0 50px;color:var(--muted);f
 const AUDIT = {
   eyebrow: "A follow-along to “Go-to-Market: The New Differentiator in the AI Era”",
   title: "The GTM Self-Audit",
-  sub: "Two lenses decide whether your go-to-market edge compounds or leaks: Planning and People. Most strategies are sound at the top and die at the hand-off. This is a 10-minute, evidence-honest self-check.",
+  sub: "Planning and People lenses decide whether your go-to-market edge compounds or leaks. Most strategies are sound at the top and are not fully grounded — they die at the hand-offs. This is a 10-minute, honest self-check.",
   meta: "Arun Mani · PSG CEO Conference · 15 June 2026",
 
   // Answer scale (label → points). Order = display order.
@@ -203,14 +189,6 @@ const AUDIT = {
     { id:"crisp",  label:"Crisp",  points:2 },
     { id:"partly", label:"Partly", points:1 },
     { id:"no",     label:"No",     points:0 }
-  ],
-
-  // Archetypes tailor the closing guidance.
-  archetypes: [
-    { id:"startup",  name:"Start-up",  note:"Job #1 is product-market fit. This audit is calibrated for Scale-up and Roll-up — use it as a forward look." },
-    { id:"scaleup",  name:"Scale-up",  note:"Your leverage is <b>Awareness &amp; Conversion</b>. Invest there first — and make sure your motion fits how buyers actually buy." },
-    { id:"rollup",   name:"Roll-up",   note:"Your leverage is <b>Expansion &amp; Advocacy</b> (cross-sell into the install base). New-logo spend is usually over-weighted — watch Planning Lens 1." },
-    { id:"grownup",  name:"Grown-up",  note:"Category leader. The edge is operating leverage and adjacency; use this to pressure-test discipline, not direction." }
   ],
 
   sections: [
@@ -221,11 +199,13 @@ const AUDIT = {
       lenses:[
         {
           name:"Investment-to-value alignment",
-          desc:"Are your GTM dollars behind the highest-value lever for your stage?",
+          desc:"Are your GTM dollars behind the highest-value lever for your stage — and do you know the returns by cut?",
           q:[
             "Can you name your single highest-value growth lever this year — and the share of GTM spend behind it?",
-            "Does your spend split match your archetype? (Roll-ups: what % goes to cross-sell/expansion vs. new-logo — and is that where the leverage actually is?)",
-            "Is any major GTM line item funded because it worked last year, rather than because it wins next year?"
+            "Does your spend split match where the leverage actually is (e.g. cross-sell/expansion vs. new-logo)?",
+            "Is any major GTM line item funded because it worked last year, rather than because it wins next year?",
+            "What is the planned payback period by channel, segment and geo — and do you know your baseline today?",
+            "What win-rate and time-to-close improvements are you targeting over the next year?"
           ]
         },
         {
@@ -234,7 +214,8 @@ const AUDIT = {
           q:[
             "Do you know from DATA — not belief — whether buyers discover and buy you directly or indirectly?",
             "Are you running enterprise reps for a product that's really self-serve — or self-serve for one that needs high-touch implementation?",
-            "On channel: a 2015 reseller model or a 2026 API/embedded one — and which does your buyer actually want?"
+            "On channel: a 2015 reseller model or a 2026 API/embedded one — and which does your buyer actually want?",
+            "What is your best-performing marketing channel — and do you have the data to back it up?"
           ]
         },
         {
@@ -251,6 +232,8 @@ const AUDIT = {
           desc:"Where does the next dollar — and the next head — go, and why?",
           q:[
             "If you placed your next €1 of GTM spend today, where would it go and what's the expected payback window?",
+            "What is your planned CAC, conversion and payback by cohort — and how is that trending across cohorts?",
+            "What is your ratio of sales & CX compensation to tooling spend — and your planned fixed-to-variable compensation mix?",
             "Are you over-invested in rep capacity and under-invested in tooling/automation that compresses cost-to-serve?",
             "Does your comp plan reward the strategy you're running NOW — or one you ran two years ago?"
           ]
@@ -267,7 +250,8 @@ const AUDIT = {
           desc:"Does your bench bring answers or questions?",
           q:[
             "In your top 20, who has learned a genuinely new skill in the last 12 months? Can you name them?",
-            "When evidence contradicts the plan, do your leaders update fast — or dig in?"
+            "When evidence contradicts the plan, do your leaders update fast — or dig in?",
+            "What is your ratio of industry insiders to curious, hungry outsiders in each role category?"
           ]
         },
         {
@@ -275,7 +259,8 @@ const AUDIT = {
           desc:"Are you hiring magnets, or comfortable known quantities?",
           q:[
             "Can each of your GTM leaders attract people better than themselves?",
-            "Which senior seats are filled by “safe and known” people who no longer stretch the role?"
+            "Which senior seats are filled by “safe and known” people who no longer stretch the role?",
+            "How many of last year's promotions were safe bets versus bold bets?"
           ]
         },
         {
@@ -293,7 +278,8 @@ const AUDIT = {
             "If you lost your top GTM leader tomorrow, who genuinely steps up — real, or a name on a chart?",
             "Is your A-player-to-median ratio widening or compressing as AI tools land?",
             "Did you cut headcount to look productive? How brittle is the bench if you need to pivot?",
-            "Who owns GTM data architecture — and is it an asset you compound on, or a debt you re-platform every three years?"
+            "Who owns GTM data architecture — and is it an asset you compound on, or a debt you re-platform every three years?",
+            "Who is architecting your end-to-end customer journey — do they have a full view, and have they mapped which stages are human-led versus AI-led?"
           ]
         }
       ]
@@ -305,17 +291,22 @@ const AUDIT = {
     { min:80, label:"Owned",       color:"var(--green)", desc:"A strength. Protect it; don't let scale erode it." },
     { min:55, label:"Directional", color:"var(--teal)",  desc:"You have a view but thin evidence. Instrument it before you spend behind it." },
     { min:30, label:"Exposed",     color:"var(--amber)", desc:"Half-managed. This is where strategy leaks at the hand-off." },
-    { min:0,  label:"Unowned",     color:"var(--red)",   desc:"Stop adding spend on top of this. Fix ownership and evidence first." }
+    { min:0,  label:"Not fully owned", color:"var(--red)", desc:"Stop adding spend on top of this. Fix ownership and evidence first." }
   ],
 
   monday:{
     intro:"Your Monday morning, straight from the talk:",
     doThis:[
-      "<b>Strategy + Planning audit.</b> Pick your archetype, lock priorities, and align distribution dollars to the highest-value lever.",
+      "<b>Strategy + Planning audit.</b> Lock your priorities and align distribution dollars to the highest-value lever.",
       "<b>People audit for the AI era.</b> Hire top talent; foster nimble, learning-biased mindsets. Fix one weak slot this quarter."
     ],
-    ignore:"<b>Ignore:</b> spray-and-pray AI experiments. Keep only the two that are AI-mature AND aligned to your archetype's GTM moat. Kill the rest.",
+    ignore:"<b>Ignore:</b> spray-and-pray AI experiments. Keep only the two that are AI-mature AND aligned to your GTM moat. Kill the rest.",
     bet:"The CEOs who win in the AI era are the ones who know where to play, ground their plans, and bet with the best — then use AI to compound those bets."
+  },
+
+  contact:{
+    linkedin:"https://www.linkedin.com/in/thearunmani/",
+    email:"arun.mani@sigaramendrum.com"
   },
 
   footer:"© Sigaram Endrum LDA · Built for the PSG CEO Conference, 15 June 2026 · Draft template — extend freely."
@@ -327,7 +318,7 @@ const AUDIT = {
 const $ = (s,el=document)=>el.querySelector(s);
 const create=(t,c)=>{const e=document.createElement(t);if(c)e.className=c;return e;};
 const STORE_KEY="se_gtm_audit_v1";
-const state = { archetype:null, answers:{} }; // answers["sectionIdx-lensIdx-qIdx"] = points
+const state = { answers:{} }; // answers["sectionIdx-lensIdx-qIdx"] = points
 
 // hero + footer
 $("#heroEyebrow").textContent = AUDIT.eyebrow;
@@ -335,20 +326,7 @@ $("#heroTitle").textContent   = AUDIT.title;
 $("#heroSub").textContent     = AUDIT.sub;
 $("#heroMeta").textContent    = AUDIT.meta;
 $("#footerLine").textContent  = AUDIT.footer;
-
-// archetype chips
-const chipWrap = $("#archeChips");
-AUDIT.archetypes.forEach(a=>{
-  const c = create("button","chip"); c.textContent=a.name; c.setAttribute("aria-pressed","false");
-  c.onclick=()=>{
-    state.archetype = a.id;
-    [...chipWrap.children].forEach(x=>x.setAttribute("aria-pressed","false"));
-    c.setAttribute("aria-pressed","true");
-    $("#archeNote").innerHTML = a.note;
-    save();
-  };
-  chipWrap.appendChild(c);
-});
+$("#footerContact").innerHTML = `Stay in touch — <a href="${AUDIT.contact.linkedin}" target="_blank" rel="noopener">LinkedIn</a> · <a href="mailto:${AUDIT.contact.email}">${AUDIT.contact.email}</a>`;
 
 // build sections
 const totalQuestions = AUDIT.sections.reduce((n,s)=>n+s.lenses.reduce((m,l)=>m+l.q.length,0),0);
@@ -398,9 +376,7 @@ function reveal(){
   const R=$("#results"); R.innerHTML="";
   const h=create("h2"); h.textContent="Your diagnostic"; R.appendChild(h);
   const lead=create("p","lead");
-  lead.textContent = state.archetype
-    ? "Read each section against where your archetype's leverage actually lives."
-    : "Tip: pick your archetype above for a tailored read.";
+  lead.textContent="Read each section as a system — a strong total can still hide a lens that isn't fully owned.";
   R.appendChild(lead);
 
   const grid=create("div","scorecard");
@@ -420,18 +396,11 @@ function reveal(){
       <div class="bar"><i style="width:${pct}%;background:${band.color}"></i></div>
       <p class="desc">${band.desc}</p>
       <p class="flag ${noCount>=3?'':'ok'}">${noCount>=3
-        ? `⚠ ${noCount} “No”s — this lens set is unowned. Closer look this quarter.`
+        ? `⚠ ${noCount} “No”s — this lens set isn't fully owned. Closer look this quarter.`
         : `${noCount} “No”s · ${answered}/${max/2} answered`}</p>`;
     grid.appendChild(card);
   });
   R.appendChild(grid);
-
-  if(state.archetype){
-    const a=AUDIT.archetypes.find(x=>x.id===state.archetype);
-    const sm=create("div","summary");
-    sm.innerHTML=`<h3>For a ${a.name}</h3><p style="margin:0;color:var(--text)">${a.note}</p>`;
-    R.appendChild(sm);
-  }
 
   const m=create("div","monday");
   m.innerHTML=`<h3>${AUDIT.monday.intro}</h3>
@@ -439,6 +408,10 @@ function reveal(){
     <p class="ignore">${AUDIT.monday.ignore}</p>
     <h3>The bet</h3><p class="serif" style="font-size:19px">${AUDIT.monday.bet}</p>`;
   R.appendChild(m);
+
+  const contact=create("div","summary");
+  contact.innerHTML=`<h3>Stay in touch</h3><p style="margin:0;color:var(--text)">If this was useful, let's keep the conversation going — <a href="${AUDIT.contact.linkedin}" target="_blank" rel="noopener">LinkedIn</a> · <a href="mailto:${AUDIT.contact.email}">${AUDIT.contact.email}</a></p>`;
+  R.appendChild(contact);
 
   R.classList.add("show");
   R.scrollIntoView({behavior:"smooth"});
@@ -448,11 +421,7 @@ function save(){ try{localStorage.setItem(STORE_KEY,JSON.stringify(state));}catc
 function restore(){
   try{
     const s=JSON.parse(localStorage.getItem(STORE_KEY)); if(!s)return;
-    state.archetype=s.archetype; state.answers=s.answers||{};
-    if(state.archetype){
-      const idx=AUDIT.archetypes.findIndex(a=>a.id===state.archetype);
-      if(idx>-1){const c=chipWrap.children[idx];c.setAttribute("aria-pressed","true");$("#archeNote").innerHTML=AUDIT.archetypes[idx].note;}
-    }
+    state.answers=s.answers||{};
     Object.entries(state.answers).forEach(([key,pts])=>{
       const row=document.querySelector(`.q[data-key="${key}"]`); if(!row)return;
       const opt=AUDIT.scale.find(o=>o.points===pts); if(!opt)return;
@@ -465,7 +434,7 @@ function restore(){
 $("#revealBtn").onclick=reveal;
 $("#resetBtn").onclick=()=>{
   if(!confirm("Clear all answers?"))return;
-  state.archetype=null; state.answers={};
+  state.answers={};
   try{localStorage.removeItem(STORE_KEY);}catch(e){}
   location.reload();
 };
