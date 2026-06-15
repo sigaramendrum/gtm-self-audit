@@ -68,9 +68,10 @@ a{color:var(--gold)}
 .q{padding:12px 0;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center}
 .q:first-of-type{border-top:none}
 .q-text{font-size:15px}
-.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;flex-shrink:0}
+.seg{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;flex-shrink:0}
 .seg button{appearance:none;border:none;background:transparent;color:var(--muted);
-  font:inherit;font-size:13px;font-weight:600;padding:8px 12px;cursor:pointer;transition:.12s;border-left:1px solid var(--line)}
+  font:inherit;font-size:13px;font-weight:600;padding:8px 12px;cursor:pointer;transition:.12s;border-left:1px solid var(--line);
+  flex:1 1 0;min-width:72px;text-align:center;white-space:nowrap}
 .seg button:first-child{border-left:none}
 .seg button:hover{color:var(--text)}
 .seg button[data-on="crisp"][aria-pressed="true"]{background:var(--green);color:#0E1116}
@@ -111,7 +112,10 @@ a{color:var(--gold)}
 
 footer{border-top:1px solid var(--line);padding:26px 0 50px;color:var(--muted);font-size:13px;text-align:center}
 footer a{color:var(--gold)}
-footer #footerContact{margin-top:8px}
+footer #footerContact{margin-top:16px;display:inline-block;background:rgba(200,164,92,.12);
+  border:1px solid var(--gold);border-radius:999px;padding:11px 20px;font-size:15px;color:var(--text)}
+footer #footerContact a{font-weight:600;text-decoration:none;border-bottom:1px solid rgba(200,164,92,.5)}
+footer #footerContact a:hover{border-bottom-color:var(--gold)}
 
 @media print{
   .topbar,.actions{display:none}
@@ -277,7 +281,13 @@ const AUDIT = {
           q:[
             "If you lost your top GTM leader tomorrow, who genuinely steps up — real, or a name on a chart?",
             "Is your A-player-to-median ratio widening or compressing as AI tools land?",
-            "Did you cut headcount to look productive? How brittle is the bench if you need to pivot?",
+            "Did you cut headcount to look productive? How brittle is the bench if you need to pivot?"
+          ]
+        },
+        {
+          name:"Critical ownership",
+          desc:"Do the make-or-break seats exist — and does someone actually own them end-to-end?",
+          q:[
             "Who owns GTM data architecture — and is it an asset you compound on, or a debt you re-platform every three years?",
             "Who is architecting your end-to-end customer journey — do they have a full view, and have they mapped which stages are human-led versus AI-led?"
           ]
@@ -309,7 +319,7 @@ const AUDIT = {
     email:"arun.mani@sigaramendrum.com"
   },
 
-  footer:"© Sigaram Endrum LDA · Built for the PSG CEO Conference, 15 June 2026 · Draft template — extend freely."
+  footer:"© Sigaram Endrum LDA · Built for the PSG CEO Conference, 15 June 2026"
 };
 
 /* ════════════════════════════════════════════════════════════════
